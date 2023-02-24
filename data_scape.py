@@ -19,8 +19,25 @@ target_soup = build_soup(html_doc=html_doc,params=params)
 
 #next, traverse through new soup
 # for each indent2, read through
-created_dict = {}
+created_dict = {"theme":[], "alt_theme":[], "author":[], "title":[], "year":[], "page":[]}
 
-author_attr = {"class":"indent2"}
-title_attr = {"span clas":"italic"}
-year_string =  "(beween parens)"
+theme_attr = {"class":"heading2"}
+author_attr = {"class":"indent2"} # tag 
+title_attr = {"class":"italic"} # tag is span
+year_string = """ (between parens)""" # " (year), "
+# page has a hyperlink. grab page numbers and hyperlinks ("pages", "links")
+pages = () # link attr href=" some_link" pages p
+
+#structure of parse
+# for every class = heading2
+    # for every class=indent2
+    # if class= indenthead exists: add an alternate theme
+    # else: add None to alternate theme (or ""?)
+        #theme attr = theme (each time), add to dict["author"]
+        # get author, add to dict["author"]
+            # remove trailing space. Then remove trailing comma
+        # get title, add to dict["title"]
+        # get yr, add to dict["yr"]
+        # get page and link, add to dict["page"]
+
+# maybe make this script into a function...I need the resulting dict for analysis
