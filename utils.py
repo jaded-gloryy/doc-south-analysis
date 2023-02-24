@@ -1,19 +1,57 @@
-"""
-Scrape a website for stylized text, read it into a DF
-"""
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, SoupStrainer
 import requests
 
-def scrape_website(url, params):
+def strain_tags(tag=None,attrs=None):
     """
-    Scrape a website for text.
+    Define what tags or attribute to parse from a BeautifulSoup object.
+    
+    Inputs:
+    "tag": html tag
+    {attrs}: {"attribute":"value"}
 
-    Inputs: 
+    Output: SoupStrainer object
+        
+    """
+    if tag:
+        strainer = SoupStrainer(tag)
+    else:
+        strainer = SoupStrainer(attrs=attrs)
+    return strainer
+
+def get_html(url):
+    """
+    Get a html document from a url.
+
+    Input: 
         Url
-        {params}: dict of patterns to look for 
 
     Output: 
-        {dict}: "column_name":[values]
+        <html_doc>
     """
     html_doc = requests.get(url=url).text
-    soup = BeautifulSoup(html_doc, "html.parser")
+    return html_doc
+
+def scrape_html(html_file, strainer=None):
+    soup = BeautifulSoup(html_file, "html.parser", parse_only=strainer).prettify()
+    return soup
+
+def build_soup(html_doc, params):
+    """
+    Shrink the scope of an html doc for more targeted parsing.
+    Inputs:
+        <html>
+    Output: BeautifulSoup object
+    """
+    # accept html file to scrape
+    # strain html (retreive certain tags).
+
+    # grab tag or attribute
+    tag_parse = params.get("tag")
+    attr_parse = params.get("attribute")
+
+    if tag_parse:
+        new_soup = strain_tags(tag=tag_parse)
+    elif attr_parse:
+        new_soup = strain_tags(attrs=attr_parse)
+
+    return new_soup
