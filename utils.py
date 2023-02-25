@@ -1,5 +1,17 @@
-from bs4 import BeautifulSoup, SoupStrainer
+from bs4 import BeautifulSoup, SoupStrainer, NavigableString, Tag
 import requests
+
+def isNavigableString(element):
+    """
+    Returns true if element is type NavigableString
+    """
+    return isinstance(element, NavigableString)
+
+def isTag(element):
+    """
+    Returns true if element is type NavigableString
+    """
+    return isinstance(element, Tag)
 
 def strain_tags(tag=None,attrs=None):
     """
@@ -31,27 +43,26 @@ def get_html(url):
     html_doc = requests.get(url=url).text
     return html_doc
 
-def scrape_html(html_file, strainer=None):
-    soup = BeautifulSoup(html_file, "html.parser", parse_only=strainer).prettify()
-    return soup
-
-def build_soup(html_doc, params):
+def build_soup(html_doc, params=None):
     """
     Shrink the scope of an html doc for more targeted parsing.
     Inputs:
         <html>
-    Output: BeautifulSoup object
+        params
+    Output: 
+        BeautifulSoup object
     """
-    # accept html file to scrape
-    # strain html (retreive certain tags).
-
-    # grab tag or attribute
     tag_parse = params.get("tag")
     attr_parse = params.get("attribute")
 
     if tag_parse:
-        new_soup = strain_tags(tag=tag_parse)
+        strainer = strain_tags(tag=tag_parse)
     elif attr_parse:
-        new_soup = strain_tags(attrs=attr_parse)
+        strainer = strain_tags(attrs=attr_parse)
+    else: 
+        strainer = None
+    
+    soup = BeautifulSoup(html_doc, "html.parser", parse_only=strainer)
 
-    return new_soup
+    return soup
+
