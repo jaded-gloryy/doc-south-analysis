@@ -24,6 +24,11 @@ Proposed analysis:
 - Using data from the [Religious Text Content Guide](https://docsouth.unc.edu/neh/religiouscontent.html), develop a theme predictor for texts
 - Evaluate how much (if any) thematic overlap there is between religious texts and slave narratives
 
+## Repo contents:
+- [SouthernBlackChurchRhetoric](https://github.com/jaded-gloryy/doc-south-analysis/blob/main/SouthernBlackChurchRhetoric.ipynb) contains all analysis.
+- [Scrape_website](https://github.com/jaded-gloryy/doc-south-analysis/blob/main/scrape_website.py) contains the functions used to obtain [Religious Text Content Guide](https://docsouth.unc.edu/neh/religiouscontent.html) data.
+- [Utils](https://github.com/jaded-gloryy/doc-south-analysis/blob/main/utils.py) contains generic functions for parsing an html document.
+- 
 ### Sources:
 https://www.kaggle.com/datasets/docsouth-data/the-church-in-the-southern-black-community
 http://docsouth.unc.edu/neh
