@@ -43,6 +43,15 @@ def get_html(url):
     html_doc = requests.get(url=url).text
     return html_doc
 
+def get_soup(html_doc):
+    """
+    Input: 
+        <html_doc>
+    Output: 
+        BeautifulSoup object
+    """
+    soup = BeautifulSoup(html_doc, "html.parser")
+    return soup  
 def build_soup(html_doc, params=None):
     """
     Shrink the scope of an html doc for more targeted parsing.
@@ -52,6 +61,7 @@ def build_soup(html_doc, params=None):
     Output: 
         BeautifulSoup object
     """
+    
     tag_parse = params.get("tag")
     attr_parse = params.get("attribute")
 

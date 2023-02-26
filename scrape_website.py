@@ -3,7 +3,7 @@ This module contains utility functions for constructing a dictionary from
 the contents of a website. 
 """
 
-from utils import get_html, build_soup, isNavigableString, isTag
+from utils import get_html, get_soup, isNavigableString, isTag
 import re
 
 def custom_filter(tag):
@@ -32,7 +32,7 @@ def scrape_data(url, filter):
         [html tags]; list of tags fitting the custom filter
     """
     html_doc = get_html(url=url)
-    soup = build_soup(html_doc=html_doc)
+    soup = get_soup(html_doc=html_doc)
     tag_list = soup.find_all(filter)
     return tag_list
 
