@@ -11,11 +11,11 @@ Analyze rhetoric of the Black Southern Church in the American South and it's eff
 
 ## Research question:
 
-Are there any measureable similaries between the themes of documents from Southern Black churches and the documents from self-emancipated and freed Black people? 
+Are there any measurable similarities between the themes of documents from Southern Black churches and the documents from self-emancipated and freed Black people? 
 
 ## Approach:
 
-[Documenting The American South](https://docsouth.unc.edu/) is one of the longest running efforts bu the Univeristy of North Carolina to collect, digitize, and publish documents from self-emancipated and freed Black people. Using [DocSouth Data](https://docsouth.unc.edu/docsouthdata/) and data from the [Religious Text Content Guide](https://docsouth.unc.edu/neh/religiouscontent.html), analyze the correlation between autobiographies, biographies, church documents, sermons, histories, encyclopedias, and other published materials from Southern Black churches and the narratives of slaves in regards to religion.
+[Documenting The American South](https://docsouth.unc.edu/) is one of the longest running efforts by the University of North Carolina to collect, digitize, and publish documents from self-emancipated and freed Black people. Using [DocSouth Data](https://docsouth.unc.edu/docsouthdata/) and data from the [Religious Text Content Guide](https://docsouth.unc.edu/neh/religiouscontent.html), analyze the correlation between autobiographies, biographies, church documents, sermons, histories, encyclopedias, and other published materials from Southern Black churches and the narratives of slaves in regards to religion.
 
 Proposed analysis:
 
