@@ -5,6 +5,211 @@ the contents of a website.
 
 from utils import get_html, get_soup, isNavigableString, isTag
 import re
+from nltk.corpus import stopwords
+
+def clean_up_text(str):
+    """
+    Remove tags and stop words
+    """
+    text = str
+    tag_query_pattern = "(\<.*?\>)"
+    weird_stuff = "(\&.*?\;)"
+    replace_with = " "
+    text = re.sub(tag_query_pattern,replace_with, text)
+    text = re.sub(weird_stuff,replace_with, text)
+    weird_stuff = ["\n"]
+    for each in weird_stuff:
+        text = text.replace(each," ")
+    return text
+
+def tokenize_words():
+    return 
+def get_pages_from_url(urls, pages):
+    """
+    Get text from a webpage, given page numbers.
+    Input:
+        [urls]
+        [pages]
+    Output:
+        [texts]
+    """
+
+    all_texts = []
+    for i in range(len(list(urls))):
+        a_url = urls[i]
+        page_ref = pages[i]
+        url_text = get_html(a_url)
+
+        current_text = ""
+        for a_pg in page_ref:
+            specific_page = "Page " + a_pg
+            start_position = url_text.find(specific_page)
+            new_soup = url_text[start_position+len(specific_page):]
+            end_position = new_soup.find("Page ")
+
+            specified_text = new_soup[:end_position]
+            current_text += specified_text
+        all_texts.append(current_text)
+
+    return all_texts
+
+
+def get_page_num(tag):
+    """
+    Get page num from tag text
+    Input:
+        <tag>
+    Output:
+        "page_num"
+    """
+    has_text = tag.text.strip("Page ") if tag.text else False
+    # if has_text and has_text.isnumeric():
+    #     return int(has_text)
+    # else: 
+    return has_text
+
+def get_range(str_range):
+    """
+    Input:
+        "str" like "num-num"
+    Output:
+        ["num", "num", "num"]
+    """
+    range_list = []
+    temp = str_range.split("-")
+    for i in range(int(temp[0]),int(temp[1])+1):
+        range_list.append(str(i))
+
+    return range_list
+
+def is_range(str):
+    """
+    Input:
+        "str"
+    Output:
+        Boolean
+    """
+    return True if str.find("-") != -1 else False
+
+def is_list(str):
+    """
+    Input:
+        "str"
+    Output:
+        Boolean
+    """
+    return True if str.find(",") != -1 else False
+
+def is_numeric(str):  
+    """
+    Input:
+        "str"
+    Output:
+        Boolean
+    """
+    return str.isnumeric()
+
+def get_page_list(pages):
+    """
+    Input:
+        "str"
+    Output:
+        ["str"]
+    """
+    if is_list(pages) and is_range(pages):
+        page_range = []
+        page_list = pages.split(",")
+        # temp_list = []
+        for page in page_list:
+            if is_range(page):
+                page_range += get_range(page)
+            else:
+                page_range.append(page)
+        # page_range.append(temp_list)
+        return page_range
+    elif is_range(pages):
+        page_range = get_range(pages)
+    elif is_list(pages):
+        page_range = pages.split(",")
+    else:
+        page_range = [pages]
+    return page_range
+    
+def text_from_siblings(tag_list):
+    """
+    Function to get data from a list of tags
+    Input:
+        [tags]
+    Output:
+        "string"
+    """
+    text_inside = ""
+    for tag in tag_list.next_siblings:
+        has_text = True if tag.text else False
+        is_a_tag = tag.name == "a" or tag.name == "hr"
+        print(text_inside)
+        if has_text and not is_a_tag:
+            print(type(tag.text))
+            text_inside += tag.text 
+            print(text_inside)
+        elif is_a_tag:
+            if type(text_inside) != str:
+                return str(text_inside)
+            else:
+                return text_inside
+        
+        
+
+def combine_url(base_url, specific_url):
+    """
+    Combine a base url with an extension.
+    Input:
+        "base_url";
+        "specific_url" or [specific_url];
+    Output:
+        "full_url"; if input is a str
+        [full_urls]; if input is a list
+    """
+    urls = []
+    if type(specific_url) == str:
+        return base_url + specific_url
+    
+    else:
+        for url in specific_url:
+            
+            full_url = base_url + url
+            urls.append(full_url)
+        return urls
+
+
+# def customized_filter(tag, filter_params):
+#     """
+#     Attempt to generalize the custom_filter
+#     Input:
+#         <html_tag>
+#     Output:
+#         Boolean
+#     """
+#     filter_length = len(filter_params)
+#     for i in filter_length:
+#         # return bool(# everything in the filter_params?)
+#     return 
+
+def a_tag_filter(tag):
+    """
+    Filter to check if a tag meets function criteria.
+
+    Input:
+        <html_tag>
+    Output:
+        Boolean
+    """
+   
+    is_a_tag = tag.name == "a"
+    a_tag_name_attr = tag.get("name") if is_a_tag and tag.get('name') else None
+    has_page = True if a_tag_name_attr and a_tag_name_attr.find("Page") != -1 else False
+    if is_a_tag and a_tag_name_attr and has_page:
+        return is_a_tag and a_tag_name_attr and has_page
 
 def custom_filter(tag):
     """
@@ -22,7 +227,7 @@ def custom_filter(tag):
     
     return is_div and has_class_attr and has_class_heading2 or has_class_indent2
 
-def scrape_data(url, filter):
+def scrape_data(url, filter=None):
     """
     Given a url, filter a html document for specifed tags.
 
@@ -51,7 +256,7 @@ def build_dict(tag_list):
     4. Pass in specific constructor (is_a, get) params when creating dict
 
     """
-    custom_dict = {"theme":[], "alt_theme":[], "author":[], "title":[], "year":[], "page":[]}
+    custom_dict = {"theme":[], "alt_theme":[], "author":[], "title":[], "year":[], "page_numbers":[], "page_link":[]}
     current_theme = None
     current_alt_theme = None
 
@@ -66,14 +271,14 @@ def build_dict(tag_list):
             year = get_year(is_year(tag))
             page_range = get_page_range(is_page_range(tag))
             page_link = get_page_link(is_page_link(tag))
-            page = (page_range, page_link)
             
             custom_dict["theme"].append(current_theme)
             custom_dict["alt_theme"].append(current_alt_theme)
             custom_dict["author"].append(author)
             custom_dict["title"].append(title)
             custom_dict["year"].append(year)
-            custom_dict["page"].append(page)
+            custom_dict["page_numbers"].append(page_range)
+            custom_dict["page_link"].append(page_link)
 
     return custom_dict
 
