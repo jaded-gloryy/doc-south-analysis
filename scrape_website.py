@@ -1,15 +1,14 @@
 """
-This module contains utility functions for constructing a dictionary from 
-the contents of a website. 
+This module contains utility functions for parsing data and constructing a dictionary from 
+the contents of a website: http://docsouth.unc.edu/neh
 """
 
-from utils import get_html, get_soup, isNavigableString, isTag
+from utils import get_html, get_soup, isNavigableString, isTag, is_list
 import re
-from nltk.corpus import stopwords
 
 def clean_up_text(str):
     """
-    Remove tags and stop words
+    Remove html tags and
     """
     text = str
     tag_query_pattern = "(\<.*?\>)"
@@ -22,8 +21,6 @@ def clean_up_text(str):
         text = text.replace(each," ")
     return text
 
-def tokenize_words():
-    return 
 def get_pages_from_url(urls, pages):
     """
     Get text from a webpage, given page numbers.
@@ -68,20 +65,6 @@ def get_page_num(tag):
     # else: 
     return has_text
 
-def get_range(str_range):
-    """
-    Input:
-        "str" like "num-num"
-    Output:
-        ["num", "num", "num"]
-    """
-    range_list = []
-    temp = str_range.split("-")
-    for i in range(int(temp[0]),int(temp[1])+1):
-        range_list.append(str(i))
-
-    return range_list
-
 def is_range(str):
     """
     Input:
@@ -91,23 +74,21 @@ def is_range(str):
     """
     return True if str.find("-") != -1 else False
 
-def is_list(str):
+def get_range(str_range):
     """
     Input:
-        "str"
+        "str" like "num-num"
     Output:
-        Boolean
+        ["num", "num", "num"]
     """
-    return True if str.find(",") != -1 else False
+    range_list = []
+    temp = str_range.split("-")
 
-def is_numeric(str):  
-    """
-    Input:
-        "str"
-    Output:
-        Boolean
-    """
-    return str.isnumeric()
+    for i in range(int(temp[0]),int(temp[1])+1):
+        range_list.append(str(i))
+
+    return range_list
+
 
 def get_page_list(pages):
     """
@@ -119,7 +100,6 @@ def get_page_list(pages):
     if is_list(pages) and is_range(pages):
         page_range = []
         page_list = pages.split(",")
-        # temp_list = []
         for page in page_list:
             if is_range(page):
                 page_range += get_range(page)
@@ -134,31 +114,7 @@ def get_page_list(pages):
     else:
         page_range = [pages]
     return page_range
-    
-def text_from_siblings(tag_list):
-    """
-    Function to get data from a list of tags
-    Input:
-        [tags]
-    Output:
-        "string"
-    """
-    text_inside = ""
-    for tag in tag_list.next_siblings:
-        has_text = True if tag.text else False
-        is_a_tag = tag.name == "a" or tag.name == "hr"
-        print(text_inside)
-        if has_text and not is_a_tag:
-            print(type(tag.text))
-            text_inside += tag.text 
-            print(text_inside)
-        elif is_a_tag:
-            if type(text_inside) != str:
-                return str(text_inside)
-            else:
-                return text_inside
-        
-        
+
 
 def combine_url(base_url, specific_url):
     """
@@ -181,35 +137,6 @@ def combine_url(base_url, specific_url):
             urls.append(full_url)
         return urls
 
-
-# def customized_filter(tag, filter_params):
-#     """
-#     Attempt to generalize the custom_filter
-#     Input:
-#         <html_tag>
-#     Output:
-#         Boolean
-#     """
-#     filter_length = len(filter_params)
-#     for i in filter_length:
-#         # return bool(# everything in the filter_params?)
-#     return 
-
-def a_tag_filter(tag):
-    """
-    Filter to check if a tag meets function criteria.
-
-    Input:
-        <html_tag>
-    Output:
-        Boolean
-    """
-   
-    is_a_tag = tag.name == "a"
-    a_tag_name_attr = tag.get("name") if is_a_tag and tag.get('name') else None
-    has_page = True if a_tag_name_attr and a_tag_name_attr.find("Page") != -1 else False
-    if is_a_tag and a_tag_name_attr and has_page:
-        return is_a_tag and a_tag_name_attr and has_page
 
 def custom_filter(tag):
     """

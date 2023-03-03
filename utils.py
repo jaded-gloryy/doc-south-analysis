@@ -1,5 +1,9 @@
 from bs4 import BeautifulSoup, SoupStrainer, NavigableString, Tag
 import requests
+from nltk.corpus import stopwords
+
+def tokenize_words():
+    return 
 
 def isNavigableString(element):
     """
@@ -76,3 +80,21 @@ def build_soup(html_doc, params=None):
 
     return soup
 
+
+def is_list(str):
+    """
+    Input:
+        "str"
+    Output:
+        Boolean
+    """
+    return True if str.find(",") != -1 else False
+
+def is_numeric(str):  
+    """
+    Input:
+        "str"
+    Output:
+        Boolean
+    """
+    return str.isnumeric()
