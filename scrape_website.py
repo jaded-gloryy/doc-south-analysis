@@ -11,14 +11,21 @@ def clean_up_text(str):
     Remove html tags and
     """
     text = str
+
+    newline = "\n"
+    text = text.replace(newline," ")
+    
     tag_query_pattern = "(\<.*?\>)"
     weird_stuff = "(\&.*?\;)"
+    weird_stuff2 = "(\&.*?160)"
     replace_with = " "
-    text = re.sub(tag_query_pattern,replace_with, text)
-    text = re.sub(weird_stuff,replace_with, text)
-    weird_stuff = ["\n"]
-    for each in weird_stuff:
-        text = text.replace(each," ")
+
+    remove_these = [tag_query_pattern, weird_stuff, weird_stuff2]
+
+    for ea in remove_these:
+        text = re.sub(ea,replace_with, text)
+
+    text = re.sub(weird_stuff2,replace_with, text)
     return text
 
 def get_pages_from_url(urls, pages):
