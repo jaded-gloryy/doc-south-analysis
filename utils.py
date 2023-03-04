@@ -1,9 +1,5 @@
 from bs4 import BeautifulSoup, SoupStrainer, NavigableString, Tag
 import requests
-from nltk.corpus import stopwords
-
-def tokenize_words():
-    return 
 
 def isNavigableString(element):
     """
