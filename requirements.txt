@@ -6,3 +6,4 @@ stopwords
 dotenv
 matplotlib
 punkt
+wordnet
