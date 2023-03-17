@@ -3,7 +3,11 @@ bs4
 requests
 textblob
 stopwords
-dotenv
+python-dotenv
 matplotlib
-punkt
+nltk
+# nltk.download('punkt')
 wordnet
+scikit-learn
+ipykernel
+jupyterlab
